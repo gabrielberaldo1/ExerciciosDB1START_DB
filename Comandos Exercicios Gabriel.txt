@@ -1,0 +1,213 @@
+#--------------Exercicio1--------------#
+Comandos:
+insert into estado(uf, nome) values ('sigla', 'nome do estado')
+
+#--------------Exercicio2--------------#
+Comandos:
+insert into cidade(estado_id, nome) values (id do estado, 'Nome da cidade')
+
+#--------------Exercicio3--------------#
+Comandos:
+delete
+from estado
+where not exists (select * from cidade where cidade.estado_id = estado.id);
+
+#--------------Exercicio4--------------#
+Comandos:
+insert into cidade(estado_id, nome) values (id de SP, 'Nome da cidade')
+
+#--------------Exercicio5--------------#
+Comandos:
+update estado set nome = 'nome que quer alterar' where id = id da cidade que quer alterar
+
+#--------------Exercicio6--------------#
+Comandos:
+select cid.id, cid.nome, uf.uf
+  from cidade cid, estado uf
+ where uf.id = cid.estado_id
+ order by uf.uf, cid.nome
+
+#--------------Exercicio7--------------#
+Comandos:
+select count(id) from cidade group by estado_id
+
+#--------------Exercicio8--------------#
+Comandos:
+alter table endereco add column tipo_endereco
+
+#--------------Exercicio9--------------#
+Comandos:
+#PARA INSERIR PESSOA
+
+insert into pessoa(nome, CPF) values ('nome da pessoa','cpf da pessoa')
+#PARA INSERIR O ENDEREÇO
+
+insert into endereco(cidade_id, UF,logradouro,numero,complemento,cep, tipo_endereco) 
+values (id da cidade,'uf do estado','logradouro do lugar','numero do lugar','complemento do lugar
+','cep do lugar','tipo do endereço')
+
+#PARA INSERIR ENDEREÇO PESSOA
+insert into pessoa_endereco(pessoa_id, endereco_id) values (id da pessoa, id do endereço)
+
+#--------------Exercicio10--------------#
+Comandos:
+#PARA INSERIR PESSOA
+
+insert into pessoa(nome, CPF) values ('nome da pessoa','cpf da pessoa')
+#PARA INSERIR O ENDEREÇO
+
+insert into endereco(cidade_id, UF,logradouro,numero,complemento,cep, tipo_endereco) 
+values (id da cidade,'uf do estado','logradouro do lugar','numero do lugar','complemento do lugar
+','cep do lugar','tipo do endereço')
+
+#PARA INSERIR ENDEREÇO PESSOA
+insert into pessoa_endereco(pessoa_id, endereco_id) values (id da pessoa, id do endereço)
+
+-- O UF DE ENDEREÇO DEVE SER DE SÃO PAULO.
+
+#--------------Exercicio11--------------#
+Comandos:
+#PARA INSERIR PESSOA
+
+insert into pessoa(nome, CPF) values ('nome da pessoa','cpf da pessoa')
+#PARA INSERIR O ENDEREÇO
+
+insert into endereco(cidade_id, UF,logradouro,numero,complemento,cep, tipo_endereco) 
+values (id da cidade,'uf do estado','logradouro do lugar','numero do lugar','complemento do lugar
+','cep do lugar','tipo do endereço')
+
+#PARA INSERIR ENDEREÇO PESSOA
+insert into pessoa_endereco(pessoa_id, endereco_id) values (id da pessoa, id do endereço)
+
+-- O UF DE ENDEREÇO DEVE SER DE SC E O TIPO DE ENDEREÇO DEVE SER SOMENTE COMERCIAL
+
+#--------------Exercicio12--------------#
+Comandos:
+
+SELECT p.nome AS nome_pessoa, e.logradouro, e.numero, e.complemento, e.cep, e.tipo_endereco, 
+esta.nome AS nome_estado, c.nome AS nome_cidade FROM pessoa p
+INNER JOIN pessoa_endereco pe ON p.id = pe.pessoa_id 
+INNER JOIN endereco e ON e.id = pe.endereco_id
+INNER JOIN cidade c ON e.cidade_id = c.id
+INNER JOIN estado esta ON esta.id = c.estado_id
+ORDER BY nome_pessoa;
+
+SELECT p.nome AS nome_pessoa, e.logradouro, e.numero, e.complemento, e.cep, e.tipo_endereco, 
+esta.nome AS nome_estado, c.nome AS nome_cidade FROM pessoa p
+INNER JOIN pessoa_endereco pe ON p.id = pe.pessoa_id 
+INNER JOIN endereco e ON e.id = pe.endereco_id
+INNER JOIN cidade c ON e.cidade_id = c.id
+INNER JOIN estado esta ON esta.id = c.estado_id
+ORDER BY nome_cidade;
+
+SELECT p.nome AS nome_pessoa, e.logradouro, e.numero, e.complemento, e.cep, e.tipo_endereco, 
+esta.nome AS nome_estado, c.nome AS nome_cidade FROM pessoa p
+INNER JOIN pessoa_endereco pe ON p.id = pe.pessoa_id 
+INNER JOIN endereco e ON e.id = pe.endereco_id
+INNER JOIN cidade c ON e.cidade_id = c.id
+INNER JOIN estado esta ON esta.id = c.estado_id
+ORDER BY nome_estado;
+
+#--------------Exercicio13--------------#
+Comandos:
+delete from cidade where id = id de Ribeirão Preto
+
+#--------------Exercicio14--------------#
+Comandos:
+update endereco set cep = '00000000'
+#--------------Exercicio15--------------#
+Comandos:
+insert into recibo(cidade_id, pessoa_id, emissor_id, descricao,data_recibo,valor) 
+values (id da cidade, id da pessoa,id do emissor,'descrição do produto',data do recibo, valor do produto)
+--ID DA CIDADE DEVE SER DE UMA CIDADE DO PARANÁ E 
+O EMISSOR ID DEVE SER O MESMO PARA OS DOIS,  OU SEJA, EMITENTE IGUAL)
+
+#--------------Exercicio16--------------#
+Comandos:
+insert into recibo(cidade_id, pessoa_id, emissor_id, descricao,data_recibo,valor) 
+values (id da cidade, id da pessoa,id do emissor,'descrição do produto',data do recibo, valor do produto)
+
+-- O EMISSOR ID DEVE SER DIFERENTE PARA CADA CLIENTE.
+
+#--------------Exercicio17--------------#
+Comandos:
+
+SELECT rec.id id_recibo,
+rec.data_recibo,
+rec.valor AS valor_recibo,
+cli.nome AS cliente_nome,
+uf.nome AS estado_cliente,
+emissor.nome AS emissor_nome,
+ufe.nome AS emissor_estado
+FROM recibo rec
+INNER JOIN pessoa cli ON cli.id = rec.pessoa_id
+INNER JOIN pessoa_endereco pe ON pe.pessoa_id = cli.id
+INNER JOIN endereco e ON pe.endereco_id = e.id
+AND e.tipo_endereco = 'RESIDENCIAL'
+INNER JOIN cidade c ON c.id = e.cidade_id
+INNER JOIN estado uf ON uf.id = c.estado_id
+INNER JOIN pessoa emissor ON emissor.id = rec.emissor_id
+INNER JOIN pessoa_endereco pee ON pee.pessoa_id = emissor.id
+INNER JOIN endereco ee ON pee.endereco_id = ee.id
+INNER JOIN cidade ce ON ce.id = ee.cidade_id
+INNER JOIN estado ufe ON ufe.id = ce.estado_id
+ORDER BY data_recibo;
+
+#Ordenado pela data do recibo#
+
+SELECT rec.id id_recibo,
+rec.data_recibo,
+rec.valor AS valor_recibo,
+cli.nome AS cliente_nome,
+uf.nome AS estado_cliente,
+emissor.nome AS emissor_nome,
+ufe.nome AS emissor_estado
+FROM recibo rec
+INNER JOIN pessoa cli ON cli.id = rec.pessoa_id
+INNER JOIN pessoa_endereco pe ON pe.pessoa_id = cli.id
+INNER JOIN endereco e ON pe.endereco_id = e.id
+AND e.tipo_endereco = 'RESIDENCIAL'
+INNER JOIN cidade c ON c.id = e.cidade_id
+INNER JOIN estado uf ON uf.id = c.estado_id
+INNER JOIN pessoa emissor ON emissor.id = rec.emissor_id
+INNER JOIN pessoa_endereco pee ON pee.pessoa_id = emissor.id
+INNER JOIN endereco ee ON pee.endereco_id = ee.id
+INNER JOIN cidade ce ON ce.id = ee.cidade_id
+INNER JOIN estado ufe ON ufe.id = ce.estado_id
+ORDER BY cliente_nome;
+
+#Ordenado pelo nome do Cliente#
+
+SELECT rec.id id_recibo,
+rec.data_recibo,
+rec.valor AS valor_recibo,
+cli.nome AS cliente_nome,
+uf.nome AS estado_cliente,
+emissor.nome AS emissor_nome,
+ufe.nome AS emissor_estado
+FROM recibo rec
+INNER JOIN pessoa cli ON cli.id = rec.pessoa_id
+INNER JOIN pessoa_endereco pe ON pe.pessoa_id = cli.id
+INNER JOIN endereco e ON pe.endereco_id = e.id
+AND e.tipo_endereco = 'RESIDENCIAL'
+INNER JOIN cidade c ON c.id = e.cidade_id
+INNER JOIN estado uf ON uf.id = c.estado_id
+INNER JOIN pessoa emissor ON emissor.id = rec.emissor_id
+INNER JOIN pessoa_endereco pee ON pee.pessoa_id = emissor.id
+INNER JOIN endereco ee ON pee.endereco_id = ee.id
+INNER JOIN cidade ce ON ce.id = ee.cidade_id
+INNER JOIN estado ufe ON ufe.id = ce.estado_id
+ORDER BY emissor_nome;
+
+#Ordenado pelo nome do Emissor#
+
+#--------------Exercicio18--------------#
+Comandos:
+SELECT Count(*) AS quanttotal_recibos
+,Sum(valor) AS valor_total
+FROM recibo
+
+
+ 
+
+
